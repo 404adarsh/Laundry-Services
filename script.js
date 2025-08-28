@@ -1,14 +1,34 @@
 let cart = [];
 
-  function addToCart(name, price) {
-    cart.push({ name, price });
-    renderCart();
-  }
+function addToCart(name, price, btn) {
+  cart.push({ name, price });
+  renderCart();
 
-  function removeFromCart(index) {
+  btn.style.display = "none"; // hide Add
+  let removeBtn = document.createElement("button");
+  removeBtn.className = "remove-btn";
+  removeBtn.innerText = "Remove Item";
+  removeBtn.onclick = function () {
+    removeFromCartByName(name, btn, removeBtn);
+  };
+  btn.after(removeBtn);
+}
+
+function removeFromCartByName(name, addBtn, removeBtn) {
+  const index = cart.findIndex(item => item.name === name);
+  if (index !== -1) {
     cart.splice(index, 1);
-    renderCart();
   }
+  renderCart();
+
+  removeBtn.remove();
+  addBtn.style.display = "inline-block";
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  renderCart();
+}
 
   function renderCart() {
     const cartBody = document.getElementById("cartBody");
@@ -30,7 +50,6 @@ let cart = [];
     document.getElementById("total").innerText = total;
   }
 
-// Email Confirmation using email.js
 function book() {
     const bookPromise = new Promise((resolve, reject) => {
         const total = document.getElementById("total").innerText;
@@ -65,17 +84,18 @@ function book() {
             return;
         }
 (function(){
-    emailjs.init("-YpHSk83Xkl--yBu8"); // Find this in EmailJS Dashboard → Account → API Keys
+    emailjs.init("-YpHSk83Xkl--yBu8"); 
 })();
 
-        // Send confirmation email using email.js
+        // Guru ji agar aap dekh rhe hai ye code to sorry yaha mai comment likh rha hu aapke liye!
+        // mai apna service id revel nhi kar sakta to aap apna kar lena
+        // ye work kar jaayega      
         emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", { //ADD YOUR SERVICES ID HERE
             to_name: name,
             to_email: email,
             phone: phone,
             total: document.getElementById("total").innerText
         }).then(function(response) {
-            // Show confirmation message below the button
             let msgDiv = document.getElementById("confirmationMsg");
             if (!msgDiv) {
                 msgDiv = document.createElement("div");
@@ -92,35 +112,16 @@ function book() {
     });
 }
 
-// Quality Description Section
-// function renderQualityDescription() {
-//     const qualityDiv = document.getElementById("qualityDescription");
-//     if (qualityDiv) {
-//         qualityDiv.innerHTML = `
-//             <h2>Why Choose Our Laundry Service?</h2>
-//             <ul class="list-style-none">
-//                 <li><strong>Premium Services:</strong> We use high-quality detergents and offer special care for your garments.</li>
-//                 <li><strong>Quick Support:</strong> Our customer support is available 24/7 to assist you.</li>
-//                 <li><strong>Timely Delivery:</strong> We guarantee on-time pickup and delivery for your convenience.</li>
-//                 <li><strong>Affordable Prices:</strong> Get the best laundry service at competitive rates.</li>
-//             </ul>
-//         `;
-//     }
-// }
-
-// Call this function on page load to display the quality section
-// document.addEventListener("DOMContentLoaded", renderQualityDescription);
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector(".newsletter-form");
 
   form.addEventListener("submit", function (e) {
-    e.preventDefault(); // stop form from reloading page
+    e.preventDefault(); 
 
     const name = form.querySelector("input[name='newsletter-name']").value.trim();
     const email = form.querySelector("input[name='newsletter-email']").value.trim();
 
-    // Simple email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (name === "" || email === "") {
@@ -133,10 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // ✅ Success notification
     alert(`🎉 Thank you, ${name}! You have been subscribed with ${email}.`);
 
-    // Clear form fields
     form.reset();
   });
 });
@@ -158,7 +157,6 @@ function burger() {
     uname.classList.toggle('v-class-resp');
     navbar.classList.toggle('h-nav-resp');
 
-    // Add event listeners to anchor tags to close burger menu when clicked
     if (navList.classList.contains('v-class-resp')) {
         const anchors = navList.querySelectorAll('a');
         anchors.forEach(anchor => {
@@ -167,7 +165,6 @@ function burger() {
     }
 }
 
-// Helper function to close burger menu
 function closeBurgerOnAnchor() {
     document.querySelector('.nav-list').classList.remove('v-class-resp');
     document.querySelector('.uname').classList.remove('v-class-resp');
